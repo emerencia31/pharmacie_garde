@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pharmacie index{% endblock %}
+
+{% block body %}
+    <h1>Pharmacies</h1>
+
+    <table class="table table-striped table-hover mb-3">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom_pharma</th>
+                <th>Telephone</th>
+                <th>Adresse</th>
+                <th>Image</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for pharmacie in pharmacies %}
+            <tr>
+                <td>{{ pharmacie.id }}</td>
+                <td>{{ pharmacie.nomPharma }}</td>
+                <td>{{ pharmacie.telephone }}</td>
+                <td>{{ pharmacie.adresse }}</td>
+                <td>{{ pharmacie.image }}</td>
+                <td>
+                    <a href="{{ path('pharmacie_show', {'id': pharmacie.id}) }}" class="btn btn-secondary mx-3">afficher</a>
+                    <a href="{{ path('pharmacie_edit', {'id': pharmacie.id}) }}" class="btn btn-primary">modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">pas de données récupérées</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="utf-pagination-container">
+        <nav class="pagination">
+            {{ knp_pagination_render(pharmacies) }}
+        </nav>
+    </div>
+
+    <a href="{{ path('pharmacie_new') }}" class="btn btn-success">Ajouter Nouveau</a>
+{% endblock %}

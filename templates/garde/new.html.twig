@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle Garde{% endblock %}
+
+{% block body %}
+    <h1>Nouvelle Garde</h1>
+    <hr class="w-25 m-auto">
+    {{ include('garde/_form.html.twig') }}
+
+    <a href="{{ path('garde_index') }}" class="btn btn-secondary">Retour à la liste</a><br><br>
+{% endblock %}

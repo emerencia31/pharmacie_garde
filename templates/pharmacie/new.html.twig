@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajout Pharmacie{% endblock %}
+
+{% block body %}
+    <h1>Ajouter Pharmacie</h1>
+<hr class="w-25 m-auto">
+    {{ include('pharmacie/_form.html.twig') }}
+
+    <a href="{{ path('pharmacie_index') }}" class="btn btn-secondary">Retour à la liste</a><br><br>
+{% endblock %}

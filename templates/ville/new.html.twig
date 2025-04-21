@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Ville{% endblock %}
+
+{% block body %}
+    <h1>Ajouter Ville</h1>
+    <hr class="w-25 m-auto">
+    {{ include('ville/_form.html.twig') }}
+
+    <a href="{{ path('ville_index') }}" class="btn btn-secondary">Retour à la liste</a><br><br>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pharmacie{% endblock %}
+
+{% block body %}
+    <h1>Pharmacie</h1>
+    <div class="row">
+        <div class="col-12 col-md-6 my-4">
+            <table class="table table-striped table-hover mb-3">
+                <tbody>
+                <tr>
+                    <td colspan="2">
+                        <img src="{{ asset('img/pharmacies/') }}{{ pharmacie.image ? pharmacie.image : '' }}"
+                             class="rounded mx-auto d-block" style="max-height: 250px !important;width: 100%;"
+                             alt="...">
+                    </td>
+                </tr>
+                <tr>
+                    <th class="text-start">Nom</th>
+                    <td>{{ pharmacie.nomPharma }}</td>
+                </tr>
+                <tr>
+                    <th class="text-start">Telephone</th>
+                    <td>{{ pharmacie.telephone }}</td>
+                </tr>
+                <tr>
+                    <th class="text-start">Adresse</th>
+                    <td>{{ pharmacie.adresse }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-12 col-md-6 py-4">
+            <iframe
+                    width="600"
+                    height="410"
+                    style="border:0"
+                    loading="lazy"
+                    allowfullscreen
+                    src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCw5NhjF8rTlv0Y99zEdk4lVOUzZybyT7U
+    &q={{ lat }},{{ long }}">
+                {# &q=Space+Needle,Seattle+WA"> #}
+            </iframe>
+        </div>
+    </div>
+
+    <h1 class="my-2">Gardes en vues</h1><br>
+    <div class="">
+        {% if gardes|length > 0 %}
+            {% for g in gardes %}
+
+                <div class="alert alert-primary w-100 mb-3">{{ g.getNomGarde() }} :
+                    Du {{ g.getDetailGarde().getDateDebut()|date("m/d/Y") }}
+                    à {{ g.getDetailGarde().getHeureDebut()|date("g:ia") }}
+                    au {{ g.getDetailGarde().getDateFin()|date("m/d/Y") }}
+                    à {{ g.getDetailGarde().getHeureFin()|date("g:ia") }}</div>
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-secondary w-100 mb-2">Aucune garde prévue</div>
+        {% endif %}
+    </div>
+    {% if app.user %}
+        {% if app.user.isAdmin() or app.user.isResponsable() %}
+            <div class="d-flex justify-content-around">
+                <a href="{{ path('pharmacie_index') }}" class="btn btn-secondary">Retour à la liste</a>
+
+                <a href="{{ path('pharmacie_edit', {'id': pharmacie.id}) }}" class="btn btn-primary">modifier</a>
+
+                {{ include('pharmacie/_delete_form.html.twig') }}
+            </div>
+        {% endif %}
+    {% endif %}
+
+{% endblock %}

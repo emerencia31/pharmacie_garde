@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Responsable{% endblock %}
+
+{% block body %}
+    <h1>Ajouter Responsable</h1>
+<hr class="w-25 m-auto">
+    {{ include('responsable/_form.html.twig') }}
+
+    <a href="{{ path('responsable_index') }}" class="btn btn-secondary">Retour à la liste</a><br><br>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Commune{% endblock %}
+
+{% block body %}
+    <h1>Ajouter Commune</h1>
+<hr class="w-25 m-auto">
+    {{ include('commune/_form.html.twig') }}
+
+    <a href="{{ path('commune_index') }}" class="btn btn-secondary">Retour à la liste</a><br><br>
+{% endblock %}

@@ -1,0 +1,159 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pharmacie index{% endblock %}
+
+{% block body %}
+    <section id="portfolio" class="portfolio">
+
+        <div class="container" data-aos="fade-up">
+
+            <header class="section-header">
+                <h2>PHARMACIE DE GARDE A DAKAR</h2>
+                <p>Consulter les dernières pharmacies</p><br>
+                <div class="container">
+                    <div class="row d-flex justify-content-center align-items-center">
+                        <div class="col-md-8">
+                            <form method="POST" action="">
+                                <div class="invisible" style="height: 0 !important;">
+                                    <input id="latSearch" name="latSearch" type="text">
+                                    <input id="longSearch" name="longSearch" type="text">
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 col-md-8">
+                                        <select class="form-select" name="distance">
+                                            <optgroup label="A moins de .. Km"/>
+                                            <option value=""></option>
+                                            <option {% if distance == '1' %}selected{% endif %} value="1">1 KM</option>
+                                            <option {% if distance == '2' %}selected{% endif %} value="2">2 KM</option>
+                                            <option {% if distance == '5' %}selected{% endif %} value="5">5 KM</option>
+                                            <option {% if distance == '10' %}selected{% endif %} value="10">10 KM
+                                            </option>
+                                        </select></div>
+                                    <div class="col-12 col-md-4">
+                                        <button type="button" onclick="allowGeolocation()" class="btn border"
+                                                data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                            <i class="icon-feather-map"></i>
+                                            Autoriser la géolocalisation
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="search"><i class="fa fa-search"></i>
+                                    <input type="text" class="form-control" name="s" value="{{ search }}"
+                                           placeholder="Saisir le nom de la pharmacie">
+                                    <button class="btn btn-primary">Rechercher</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            {# <div class="row" data-aos="fade-up" data-aos-delay="100"> #}
+            {# <div class="col-lg-12 d-flex justify-content-center"> #}
+            {# <ul id="portfolio-flters"> #}
+            {# <li data-filter="*" class="filter-active">All</li> #}
+            {# <li data-filter=".filter-app">App</li> #}
+            {# <li data-filter=".filter-card">Card</li> #}
+            {# <li data-filter=".filter-web">Web</li> #}
+            {# </ul> #}
+            {# </div> #}
+            {# </div> #}
+
+            <div class="row gy-4 portfolio-container" data-aos="fade-up" data-aos-delay="50">
+                {% for pharmacie in pharmacies %}
+                    <div class="col-lg-4 col-md-6 portfolio-item filter-app">
+                        <div class="portfolio-wrap">
+                            <img src="{{ asset('img/pharmacies/') }}{{ pharmacie.image ? pharmacie.image : '' }}"
+                                 class="img-fluid" style="height: 240px !important;" alt="">
+                            <div class="portfolio-info">
+                                <h4>{{ pharmacie.getNomPharma() }}</h4>
+                                <p>{{ pharmacie.telephone }}</p>
+                                <div class="portfolio-links">
+                                    <a href="{{ asset('img/pharmacies/') }}{{ pharmacie.image ? pharmacie.image : '' }}"
+                                       data-gallery="portfolioGallery"
+                                       class="portfokio-lightbox" title="{{ pharmacie.getNomPharma() }}"><i
+                                                class="bi bi-plus"></i></a>
+                                    <a href="{{ path('pharmacie_show', {'id': pharmacie.id}) }}" title="More Details"><i
+                                                class="bi bi-link"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                {% if pharmacies|length == 0 %}
+                    <h4 class="text-danger">AUCUNE PHARMACIE DU NOM DE "{{ search }}"</h4>
+                {% endif %}
+            </div>
+            <div class="utf-pagination-container">
+                <nav class="pagination">
+                    {{ knp_pagination_render(pharmacies) }}
+                </nav>
+            </div>
+
+        </div>
+
+    </section><!-- End Portfolio Section -->
+
+
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Est-ce bien votre position?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <iframe
+                            id="iframeMaPosition"
+                            width="600"
+                            height="410"
+                            style="border:0"
+                            loading="lazy"
+                            allowfullscreen
+                            {# src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCw5NhjF8rTlv0Y99zEdk4lVOUzZybyT7U #}
+                            {# &q={{ lat }},{{ long }}" #}
+                    >
+                        {# &q=Space+Needle,Seattle+WA"> #}
+                    </iframe>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Non</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Oui</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block scripts %}
+    <script>
+        allowGeolocation();
+
+        function allowGeolocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            } else {
+                x.innerHTML = "Geolocation is not supported by this browser.";
+            }
+        }
+
+        function loadResults(position) {
+            if (position && position.coords.latitude && position.coords.longitude) {
+                long = position.coords.latitude;
+                lat = position.coords.longitude;
+                console.log("LONGITUDE : " + long);
+                console.log("LATITUDE : " + lat);
+                // console.log("https://www.google.com/maps/embed/v1/place?key=AIzaSyCw5NhjF8rTlv0Y99zEdk4lVOUzZybyT7U&q=" + lat + "," + long);
+                document.getElementById("iframeMaPosition").setAttribute("src",
+                    "https://www.google.com/maps/embed/v1/place?key=AIzaSyCw5NhjF8rTlv0Y99zEdk4lVOUzZybyT7U&q=" + long + "," + lat);
+                document.getElementById("latSearch").setAttribute("value", lat);
+                document.getElementById("longSearch").setAttribute("value", long);
+            }
+        }
+
+        function showPosition(position) {
+            loadResults(position);
+        }
+    </script>
+{% endblock %}
